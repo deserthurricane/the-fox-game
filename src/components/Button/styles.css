@@ -1,0 +1,23 @@
+.button {
+  box-sizing: border-box;
+  width: 200px;
+  padding: 16px;
+  border: 1px solid brown;
+  background: orange;
+  border-radius: 4px;
+  outline: none;
+  color: white;
+}
+
+.button:hover {
+  cursor: pointer;
+}
+
+.button__disabled {
+  background: white;
+  color: black;
+}
+
+.button__disabled:hover {
+  cursor: not-allowed;
+}
