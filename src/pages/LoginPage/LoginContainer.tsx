@@ -51,7 +51,7 @@ export function LoginContainer() {
           onBlur={hideInput}
         />
       ) : (
-        <span>
+        <span className="name_wrapper">
           Hello&nbsp;
           <span className="name" onClick={() => setEditMode(true)}>
             {name}

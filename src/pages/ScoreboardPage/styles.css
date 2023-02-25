@@ -1,0 +1,58 @@
+.scoreboard_container {
+  position: relative;
+}
+
+.title {
+  text-align: center;
+}
+
+.scores_table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.scores_table thead tr th {
+  background: #A5A5A5;
+  border-bottom-width: 3px;
+  color: #fff;
+  font-weight: 600;
+}
+
+.scores_table tbody tr td:first-child {
+  background: #A5A5A5;
+  color: #fff;
+  font-weight: 600;
+  text-align: center;
+}
+
+.scores_table tbody tr td:last-child {
+  text-align: right;
+}
+
+.scores_table tr:nth-child(even) {
+  background: #f0f0f0;
+}
+
+.scores_table tr td:nth-child(odd) {
+  text-align: center;
+}
+
+.scores_table tr:nth-child(odd) {
+  background: #E1E1E1;
+}
+
+.scores_table th, .scores_table td {
+  padding: 8px;
+  border: 1px solid white;
+}
+
+.buttons_container {
+  position: sticky;
+  bottom: 0;
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+  margin: 0px auto;
+  padding: 32px 0;
+  background: rgba(255,255,255,0.9);
+}

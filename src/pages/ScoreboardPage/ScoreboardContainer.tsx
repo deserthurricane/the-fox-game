@@ -5,6 +5,8 @@ import { ScoresManager } from "../../store/StorageManager";
 import { UserContext } from "../../store/UserProvider";
 import { ScoreboardComponent } from "./ScoreboardComponent";
 
+import './styles.css';
+
 export function ScoreboardContainer() {
   const [sortedScores, setSortedScores] = useState<ScoreDTO[] | undefined>();
 
@@ -46,10 +48,10 @@ export function ScoreboardContainer() {
   }
 
   return (
-    <>
-      <h2>SCOREBOARD</h2>
+    <div className="scoreboard_container">
+      <h2 className="title">SCOREBOARD</h2>
       <ScoreboardComponent scores={sortedScores} />
-      <div>
+      <div className="buttons_container">
         <Button
           text="To Welcome Screen"
           onClick={goToWelcomeScreen}
@@ -59,6 +61,6 @@ export function ScoreboardContainer() {
           onClick={goToGameScreen}
         />
       </div>
-    </>
+    </div>
   )
 }

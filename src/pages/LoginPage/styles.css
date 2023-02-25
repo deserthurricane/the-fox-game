@@ -1,3 +1,7 @@
+.name_wrapper {
+  line-height: 32px;
+}
+
 .name:hover {
   cursor: pointer;
 }

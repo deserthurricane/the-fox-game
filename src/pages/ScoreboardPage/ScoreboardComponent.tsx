@@ -1,5 +1,7 @@
 import { useMemo } from "react";
 
+import './styles.css';
+
 type ScoreboardComponentProps = {
   scores: ScoreDTO[];
 }
@@ -23,7 +25,7 @@ export function ScoreboardComponent({ scores }: ScoreboardComponentProps) {
   }, [scores]);
 
   return (
-    <table>
+    <table className="scores_table">
       <thead>
         <tr>
           <th>Rank</th>
