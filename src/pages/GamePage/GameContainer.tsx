@@ -1,50 +1,19 @@
-import { ForwardedRef, forwardRef, memo, useCallback, useContext, useEffect, useState } from "react";
-import { AnimalImage, useGetImages } from "./useGetImages";
+import { useCallback, useContext, useEffect, useState } from "react";
+import { useGetImages } from "./useGetImages";
 import { useTimer } from './useTimer';
 import { ScoresManager } from '../../store/StorageManager';
 import { UserContext } from "../../store/UserProvider";
 import { ScreenContext } from "../../store/ScreenProvider";
-import { useCallbackRef } from './useCallbackRef';
-
-import "./styles.css";
-
-
-type ImagesListComponentProps = {
-  images: AnimalImage[];
-  onClick: (isFox: boolean) => void;
-}
-
-const ImagesListComponent = memo(forwardRef(
-  ({
-    images,
-    onClick
-  }: ImagesListComponentProps, ref: ForwardedRef<HTMLDivElement>) => {
-    return (
-      <div ref={ref} className="container">
-        {images.map(({ url, isFox }) => (
-          <img
-            key={url}
-            alt="Animal: dog, cat or fox"
-            src={url}
-            className="image"
-            onClick={() => onClick(isFox)}
-          />
-        ))}
-      </div>
-    );
-  }
-));
+import { ImagesListComponent } from "./ImagesListComponent";
 
 export function GameContainer() {
   const [foxCount, setFoxCount] = useState<number>(0);
   const [round, setRound] = useState<number>(-1);
 
-  const { data, setUser } = useContext(UserContext);
+  const { user, setUser } = useContext(UserContext);
   const { setScreen } = useContext(ScreenContext);
 
   const { imagesOneRound, error } = useGetImages(round);
-
-  const [imagesListRef, getImagesListRef] = useCallbackRef();
 
   const remainingTimeSec = useTimer(round === 0);
 
@@ -65,25 +34,23 @@ export function GameContainer() {
   }, [round, imagesOneRound]);
 
   useEffect(() => {
-    if (remainingTimeSec === 0 && data?.name && typeof setScreen === 'function') {
+    if (remainingTimeSec === 0 && user?.name && typeof setScreen === 'function') {
       const scoresStorage = new ScoresManager();
       scoresStorage.addScore({
-        name: data.name,
+        name: user.name,
         date: Date.now(),
         score: foxCount,
       });
 
       setUser({
-        name: data.name,
+        name: user.name,
         score: foxCount,
       });
 
       setScreen('scores');
     }
 
-  }, [remainingTimeSec, data.name, foxCount, setScreen, setUser]);
-
-  console.log(imagesListRef, 'imagesListRef');  
+  }, [remainingTimeSec, user.name, foxCount, setScreen, setUser]);
 
   if (round === -1) {
     return <span>Is loading...</span>;
@@ -93,7 +60,7 @@ export function GameContainer() {
     <div>
       <span>Score: {foxCount}</span>
       <span>&nbsp;&nbsp;Time left: {remainingTimeSec}</span>
-      <ImagesListComponent ref={getImagesListRef} images={imagesOneRound} onClick={onImageClick} />
+      <ImagesListComponent images={imagesOneRound} onClick={onImageClick} />
     </div>
   );
 }

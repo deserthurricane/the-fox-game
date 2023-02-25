@@ -1,15 +1,15 @@
-import { useCallback, useContext, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import { Button, Input } from '../../components';
 import { ScreenContext } from "../../store/ScreenProvider";
 import { UserContext } from "../../store/UserProvider";
 import './styles.css';
 
 export function LoginContainer() {
-  const [editMode, setEditMode] = useState<boolean>(true);
+  const [editMode, setEditMode] = useState<boolean | null>(null);
   const [name, setName] = useState<string>('');
 
   const { setScreen } = useContext(ScreenContext);
-  const { setUser } = useContext(UserContext);
+  const { user, setUser } = useContext(UserContext);
 
   const hideInput = useCallback(() => {
     if (name.length > 0) {
@@ -25,6 +25,18 @@ export function LoginContainer() {
       })
     }
   }, [name, setScreen, setUser]);
+
+  useEffect(() => {
+    setEditMode(!user.name);
+    
+    if (user.name) {
+      setName(user.name);
+    }
+  }, [user.name]);
+
+  if (editMode === null) {
+    return null;
+  }
 
   return (
     <>

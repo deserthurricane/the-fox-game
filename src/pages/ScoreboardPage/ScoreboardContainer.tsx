@@ -1,11 +1,15 @@
-import { useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import { Button } from "../../components";
+import { ScreenContext } from "../../store/ScreenProvider";
 import { ScoresManager } from "../../store/StorageManager";
+import { UserContext } from "../../store/UserProvider";
 import { ScoreboardComponent } from "./ScoreboardComponent";
 
 export function ScoreboardContainer() {
-  // @TODO get from storage
-  const [sortedScores, setSortedScores] = useState<ScoresDTO[] | undefined>();
+  const [sortedScores, setSortedScores] = useState<ScoreDTO[] | undefined>();
+
+  const { setScreen } = useContext(ScreenContext);
+  const { setUser } = useContext(UserContext);
 
   useEffect(() => {
     const scoresStorage = new ScoresManager();
@@ -15,6 +19,27 @@ export function ScoreboardContainer() {
       setSortedScores(scores.sort((score1, score2) => score2.score - score1.score));
     } 
   }, []);
+
+  const goToWelcomeScreen = useCallback(() => {
+    if (typeof setScreen === 'function' && typeof setUser === 'function') {
+      setUser((user) => ({
+        ...user,
+        score: 0,
+      }));
+      setScreen('login');
+    }
+  }, [setScreen, setUser]);
+
+  const goToGameScreen = useCallback(() => {
+    if (typeof setScreen === 'function') {
+      setUser((user) => ({
+        ...user,
+        score: 0,
+      }));
+
+      setScreen('game');
+    }
+  }, [setScreen]);
 
   if (!sortedScores) {
     return null;
@@ -27,9 +52,11 @@ export function ScoreboardContainer() {
       <div>
         <Button
           text="To Welcome Screen"
+          onClick={goToWelcomeScreen}
         />
         <Button
           text="PLAY!"
+          onClick={goToGameScreen}
         />
       </div>
     </>

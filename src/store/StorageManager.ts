@@ -12,13 +12,14 @@ export class ScoresManager {
     return ScoresManager.instance;
   }
 
-  getScores(): ScoreDTO[]  {
+  getScores(): ScoreDTO[] {
     try {
       const scores = localStorage.getItem('scores');
       return scores ? JSON.parse(scores) : [];
     } catch(error) {
       console.log(error);
       alert(`Error on getting scores`);
+      return [];
     }
   }
 

@@ -6,7 +6,7 @@ export const ScreenContext = createContext<{ screen: Screen, setScreen?: (nextSc
   screen: 'login',
 });
 
-export function ScreenProvider({ children }) {
+export function ScreenProvider({ children }: React.PropsWithChildren) {
   const [currentScreen, setCurrentScreen] = useState<Screen>('login');
 
   return (
