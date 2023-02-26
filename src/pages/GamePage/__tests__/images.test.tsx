@@ -3,9 +3,8 @@ import { act, cleanup, render, renderHook } from '@testing-library/react';
 import fetchMock from 'jest-fetch-mock';
 
 import { useGetImages } from '../useGetImages';
-import * as Helpers from '../helpers'; 
+import * as Helpers from '../helpers';
 import { GameContainer } from '../GameContainer';
-
 
 describe('Images are received via API and rendered into the DOM', () => {
   beforeEach(() => {
@@ -25,15 +24,15 @@ describe('Images are received via API and rendered into the DOM', () => {
     };
 
     const fakeCatsResponse: CAT_API_RESPONSE = [
-      { id: 'ik', url: 'https://cdn2.thecatapi.com/images/ik.jpg' }, 
-      { id: '1p1', url: 'https://cdn2.thecatapi.com/images/1p1.jpg' }, 
-      { id: '29g', url: 'https://cdn2.thecatapi.com/images/29g.jpg' }, 
-      { id: '7r6', url: 'https://cdn2.thecatapi.com/images/7r6.jpg' }, 
-      { id: 'a1b', url: 'https://cdn2.thecatapi.com/images/a1b.jpg' }, 
-      { id: 'a7n', url: 'https://cdn2.thecatapi.com/images/a7n.jpg' }, 
-      { id: 'b3k', url: 'https://cdn2.thecatapi.com/images/b3k.jpg' }, 
-      { id: '8LxU2Gwmo', url: 'https://cdn2.thecatapi.com/images/8LxU2Gwmo.jpg' }, 
-      { id: 'j3WPHuW7A', url: 'https://cdn2.thecatapi.com/images/j3WPHuW7A.jpg' }, 
+      { id: 'ik', url: 'https://cdn2.thecatapi.com/images/ik.jpg' },
+      { id: '1p1', url: 'https://cdn2.thecatapi.com/images/1p1.jpg' },
+      { id: '29g', url: 'https://cdn2.thecatapi.com/images/29g.jpg' },
+      { id: '7r6', url: 'https://cdn2.thecatapi.com/images/7r6.jpg' },
+      { id: 'a1b', url: 'https://cdn2.thecatapi.com/images/a1b.jpg' },
+      { id: 'a7n', url: 'https://cdn2.thecatapi.com/images/a7n.jpg' },
+      { id: 'b3k', url: 'https://cdn2.thecatapi.com/images/b3k.jpg' },
+      { id: '8LxU2Gwmo', url: 'https://cdn2.thecatapi.com/images/8LxU2Gwmo.jpg' },
+      { id: 'j3WPHuW7A', url: 'https://cdn2.thecatapi.com/images/j3WPHuW7A.jpg' },
       { id: 'RvfGGt00v', url: 'https://cdn2.thecatapi.com/images/RvfGGt00v.jpg' },
     ];
 
@@ -52,23 +51,35 @@ describe('Images are received via API and rendered into the DOM', () => {
     fetchMock.mockResponseOnce(JSON.stringify(fakeFox1Response));
     fetchMock.mockResponseOnce(JSON.stringify(fakeFox2Response));
 
-    jest.spyOn(Helpers, 'preloadImage').mockImplementation((url: string, isFox: boolean) => Promise.resolve({ url, isFox }));
+    jest
+      .spyOn(Helpers, 'preloadImage')
+      .mockImplementation(
+        async (url: string, isFox: boolean) => await Promise.resolve({ url, isFox }),
+      );
   });
 
   afterEach(cleanup);
 
   test('useGetImages hook returns animals images when API calls succeed', async () => {
     const { result } = await act(() => {
-      return renderHook(() => useGetImages(-1))
+      return renderHook(() => useGetImages(-1));
     });
 
     // All 9 images are loaded
     expect(result.current.imagesOneRound).toHaveLength(9);
 
     // There is proper quantity for dogs, cats and foxes images
-    expect(result.current.imagesOneRound.filter(({ url }) => url.startsWith('https://images.dog.ceo'))).toHaveLength(4);
-    expect(result.current.imagesOneRound.filter(({ url }) => url.startsWith('https://cdn2.thecatapi.com'))).toHaveLength(4);
-    expect(result.current.imagesOneRound.filter(({ url }) => url.startsWith('https://randomfox.ca'))).toHaveLength(1);
+    expect(
+      result.current.imagesOneRound.filter(({ url }) => url.startsWith('https://images.dog.ceo')),
+    ).toHaveLength(4);
+    expect(
+      result.current.imagesOneRound.filter(({ url }) =>
+        url.startsWith('https://cdn2.thecatapi.com'),
+      ),
+    ).toHaveLength(4);
+    expect(
+      result.current.imagesOneRound.filter(({ url }) => url.startsWith('https://randomfox.ca')),
+    ).toHaveLength(1);
 
     // There is no error
     expect(result.current.error).toBe('');
@@ -89,8 +100,14 @@ describe('Images are received via API and rendered into the DOM', () => {
     expect(images).toHaveLength(9);
 
     // There is proper quantity for dogs, cats and foxes images in the DOM
-    expect(images.filter((image) => image.getAttribute('src')!.startsWith('https://images.dog.ceo'))).toHaveLength(4);
-    expect(images.filter((image) => image.getAttribute('src')!.startsWith('https://cdn2.thecatapi.com'))).toHaveLength(4);
-    expect(images.filter((image) => image.getAttribute('src')!.startsWith('https://randomfox.ca'))).toHaveLength(1);
+    expect(
+      images.filter((image) => image.getAttribute('src')!.startsWith('https://images.dog.ceo')),
+    ).toHaveLength(4);
+    expect(
+      images.filter((image) => image.getAttribute('src')!.startsWith('https://cdn2.thecatapi.com')),
+    ).toHaveLength(4);
+    expect(
+      images.filter((image) => image.getAttribute('src')!.startsWith('https://randomfox.ca')),
+    ).toHaveLength(1);
   });
 });

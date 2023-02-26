@@ -1,10 +1,10 @@
-import { memo, useContext, useMemo } from "react"
-import { LoginContainer } from "./pages/LoginPage/LoginContainer";
-import { GameContainer } from "./pages/GamePage/GameContainer";
-import { ScreenContext, ScreenProvider } from "./store/ScreenProvider";
-import { UserProvider } from "./store/UserProvider"
-import { ScoreboardContainer } from "./pages/ScoreboardPage/ScoreboardContainer";
-import { Layout } from "./components";
+import { memo, useContext, useMemo } from 'react';
+import { LoginContainer } from './pages/LoginPage/LoginContainer';
+import { GameContainer } from './pages/GamePage/GameContainer';
+import { ScreenContext, ScreenProvider } from './store/ScreenProvider';
+import { UserProvider } from './store/UserProvider';
+import { ScoreboardContainer } from './pages/ScoreboardPage/ScoreboardContainer';
+import { Layout } from './components';
 
 const AppComponent = memo(() => {
   const { screen } = useContext(ScreenContext);
@@ -22,11 +22,7 @@ const AppComponent = memo(() => {
     }
   }, [screen]);
 
-  return (
-    <Layout>
-      {ScreenComponent}
-    </Layout>
-  )
+  return <Layout>{ScreenComponent}</Layout>;
 });
 
 export const App = () => {
@@ -36,6 +32,5 @@ export const App = () => {
         <AppComponent />
       </UserProvider>
     </ScreenProvider>
-  )
-}
-
+  );
+};

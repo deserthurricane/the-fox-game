@@ -1,7 +1,7 @@
-import { useCallback, useContext, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from 'react';
 import { Button, Input } from '../../components';
-import { ScreenContext } from "../../store/ScreenProvider";
-import { UserContext } from "../../store/UserProvider";
+import { ScreenContext } from '../../store/ScreenProvider';
+import { UserContext } from '../../store/UserProvider';
 import './styles.css';
 
 /**
@@ -27,7 +27,7 @@ export function LoginContainer() {
 
   useEffect(() => {
     setEditMode(!savedUser);
-    
+
     if (savedUser) {
       setName(savedUser);
     }
@@ -57,12 +57,12 @@ export function LoginContainer() {
           </span>
         </span>
       )}
-      <Button 
+      <Button
         className="play_button"
         text="PLAY!"
         disabled={name.length === 0}
         onClick={goToGamePage}
       />
     </>
-  )
+  );
 }

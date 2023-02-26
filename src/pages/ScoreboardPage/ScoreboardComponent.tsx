@@ -1,10 +1,10 @@
-import { useMemo } from "react";
+import { useMemo } from 'react';
 
 import './styles.css';
 
 type ScoreboardComponentProps = {
   scores: ScoreDTO[];
-}
+};
 
 export function ScoreboardComponent({ scores }: ScoreboardComponentProps) {
   const ScoresRows = useMemo(() => {
@@ -14,14 +14,14 @@ export function ScoreboardComponent({ scores }: ScoreboardComponentProps) {
         <td>{name}</td>
         <td>
           {new Date(date).getFullYear()},&nbsp;
-          {new Date(date).toLocaleString('en-US', { 
-            month: 'short', 
-            day: 'numeric' 
+          {new Date(date).toLocaleString('en-US', {
+            month: 'short',
+            day: 'numeric',
           })}
         </td>
         <td>{score}</td>
       </tr>
-    ))
+    ));
   }, [scores]);
 
   return (
@@ -34,9 +34,7 @@ export function ScoreboardComponent({ scores }: ScoreboardComponentProps) {
           <th>Score</th>
         </tr>
       </thead>
-      <tbody>
-        {ScoresRows}
-      </tbody>
+      <tbody>{ScoresRows}</tbody>
     </table>
-  )
+  );
 }

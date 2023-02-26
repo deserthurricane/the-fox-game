@@ -1,10 +1,10 @@
-import { useCallback, useContext, useEffect, useState } from "react";
-import { useGetImages } from "./useGetImages";
+import { useCallback, useContext, useEffect, useState } from 'react';
+import { useGetImages } from './useGetImages';
 import { useTimer } from './useTimer';
 import { ScoresManager } from '../../store/StorageManager';
-import { UserContext } from "../../store/UserProvider";
-import { ScreenContext } from "../../store/ScreenProvider";
-import { ImagesListComponent } from "./ImagesListComponent";
+import { UserContext } from '../../store/UserProvider';
+import { ScreenContext } from '../../store/ScreenProvider';
+import { ImagesListComponent } from './ImagesListComponent';
 
 /**
  * Game page container
@@ -16,7 +16,7 @@ export function GameContainer() {
   const { user, setUser } = useContext(UserContext);
   const { setScreen } = useContext(ScreenContext);
 
-  const { imagesOneRound, error } = useGetImages(round);
+  const { imagesOneRound } = useGetImages(round);
 
   const remainingTimeSec = useTimer(round === 0);
 
@@ -47,7 +47,6 @@ export function GameContainer() {
 
       setScreen('scores');
     }
-
   }, [remainingTimeSec, user, foxCount, setScreen, setUser]);
 
   if (round === -1) {

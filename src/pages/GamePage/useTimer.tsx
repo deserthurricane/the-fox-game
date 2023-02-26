@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from 'react';
 
 const ONE_ROUND_TIME_SEC = 30;
 
@@ -17,7 +17,7 @@ export function useTimer(areImagesVisible: boolean): number {
       interval.current = setInterval(() => {
         remainingSec--;
         setRemainingTimeSec(remainingSec);
-  
+
         if (remainingSec === 0) {
           clearInterval(interval.current);
         }
@@ -30,7 +30,7 @@ export function useTimer(areImagesVisible: boolean): number {
       if (interval.current) {
         clearInterval(interval.current);
       }
-    }
+    };
   }, []);
 
   return remainingTimeSec;

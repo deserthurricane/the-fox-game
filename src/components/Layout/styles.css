@@ -3,7 +3,8 @@ html {
   font-family: sans-serif;
 }
 
-body, #root {
+body,
+#root {
   height: 100%;
 }
 

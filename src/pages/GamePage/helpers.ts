@@ -8,18 +8,18 @@ export function shuffleArray() {
 }
 
 /**
- * Force browser to cache images 
+ * Force browser to cache images
  * and resolve them via Image onload event callback
  */
-export function preloadImage(imageUrl: string, isFox: boolean): Promise<AnimalImage> {
-  return new Promise((resolve) => {
+export async function preloadImage(imageUrl: string, isFox: boolean): Promise<AnimalImage> {
+  return await new Promise((resolve) => {
     const image = new Image();
     image.src = imageUrl;
 
     image.onload = () => {
       resolve({
         url: imageUrl,
-        isFox
+        isFox,
       });
     };
   });

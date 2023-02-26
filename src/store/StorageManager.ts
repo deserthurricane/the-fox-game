@@ -19,7 +19,7 @@ export class ScoresManager {
     try {
       const scores = localStorage.getItem('scores');
       return scores ? JSON.parse(scores) : [];
-    } catch(error) {
+    } catch (error) {
       console.log(error);
       alert(`Error on getting scores`);
       return [];
@@ -31,7 +31,7 @@ export class ScoresManager {
       const scores = this.getScores();
       scores.push(newScore);
       localStorage.setItem('scores', JSON.stringify(scores));
-    } catch(error) {
+    } catch (error) {
       alert(`Error on adding new score`);
     }
   }

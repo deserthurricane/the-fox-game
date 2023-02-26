@@ -1,18 +1,22 @@
-import React, { ButtonHTMLAttributes, memo } from "react";
+import React, { ButtonHTMLAttributes, memo } from 'react';
 import cn from 'classnames';
 import './styles.css';
 
 type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   text: string;
-}
+};
 
 /**
  * Button UI component
  */
 export const Button = memo(({ text, disabled, className, onClick, ...otherProps }: ButtonProps) => {
-  const buttonClassname: string = cn('button', {
-      button__disabled: disabled
-    }, className);
+  const buttonClassname: string = cn(
+    'button',
+    {
+      button__disabled: disabled,
+    },
+    className,
+  );
 
   return (
     <button
@@ -24,5 +28,5 @@ export const Button = memo(({ text, disabled, className, onClick, ...otherProps 
     >
       {text}
     </button>
-  )
+  );
 });

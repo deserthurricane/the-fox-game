@@ -10,9 +10,12 @@ type InputProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'onChange'> & {
  * Input UI component
  */
 export const Input = memo(({ name, label, onChange, ...inputProps }: InputProps) => {
-  const handleInputChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
-    onChange(e.target.value);
-  }, [onChange])
+  const handleInputChange = useCallback(
+    (e: ChangeEvent<HTMLInputElement>) => {
+      onChange(e.target.value);
+    },
+    [onChange],
+  );
 
   return (
     <span className="input_wrapper">
@@ -21,12 +24,7 @@ export const Input = memo(({ name, label, onChange, ...inputProps }: InputProps)
           {label}:
         </label>
       )}
-      <input
-        className="input"
-        name={name}
-        onChange={handleInputChange}
-        {...inputProps}
-      />
+      <input className="input" name={name} onChange={handleInputChange} {...inputProps} />
     </span>
-  )
+  );
 });
