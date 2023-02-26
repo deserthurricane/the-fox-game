@@ -47,10 +47,10 @@ describe('Images are received via API and rendered into the DOM', () => {
       link: 'https://randomfox.ca/?i=52',
     };
 
-    fetchMock.mockResolvedValueOnce({ status: 200, json: jest.fn(() => Promise.resolve(fakeDogsResponse)) });
-    fetchMock.mockResolvedValueOnce({ status: 200, json: jest.fn(() => Promise.resolve(fakeCatsResponse)) });
-    fetchMock.mockResolvedValueOnce({ status: 200, json: jest.fn(() => Promise.resolve(fakeFox1Response)) });
-    fetchMock.mockResolvedValueOnce({ status: 200, json: jest.fn(() => Promise.resolve(fakeFox2Response)) });
+    fetchMock.mockResponseOnce(JSON.stringify(fakeDogsResponse));
+    fetchMock.mockResponseOnce(JSON.stringify(fakeCatsResponse));
+    fetchMock.mockResponseOnce(JSON.stringify(fakeFox1Response));
+    fetchMock.mockResponseOnce(JSON.stringify(fakeFox2Response));
 
     jest.spyOn(Helpers, 'preloadImage').mockImplementation((url: string, isFox: boolean) => Promise.resolve({ url, isFox }));
   });
