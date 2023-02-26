@@ -22,6 +22,7 @@ export function LoginContainer() {
       setScreen('game');
       setUser({
         name,
+        score: 0,
       })
     }
   }, [name, setScreen, setUser]);
