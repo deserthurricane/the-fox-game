@@ -18,6 +18,4 @@ main {
   align-items: center;
   width: fit-content;
   margin: 0 auto;
-  /* height: 50%; */
-  min-height: 500px;
 }

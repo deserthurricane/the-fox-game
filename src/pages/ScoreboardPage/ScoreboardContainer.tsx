@@ -14,7 +14,7 @@ export function ScoreboardContainer() {
   const { setUser } = useContext(UserContext);
 
   useEffect(() => {
-    const scoresStorage = new ScoresManager();
+    const scoresStorage = ScoresManager.getInstance();
     const scores = scoresStorage.getScores();
 
     if (Array.isArray(scores) && scores.length > 0) {

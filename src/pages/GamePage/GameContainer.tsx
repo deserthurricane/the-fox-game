@@ -35,7 +35,7 @@ export function GameContainer() {
 
   useEffect(() => {
     if (remainingTimeSec === 0 && user?.name && typeof setScreen === 'function') {
-      const scoresStorage = new ScoresManager();
+      const scoresStorage = ScoresManager.getInstance();
       scoresStorage.addScore({
         name: user.name,
         date: Date.now(),

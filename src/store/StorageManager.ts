@@ -2,11 +2,14 @@
  * Scores storage manager singleton
  */
 export class ScoresManager {
-  private static instance: InstanceType<typeof ScoresManager>;
+  private static instance: ScoresManager;
 
-  constructor() {
+  // Disable calling constructor from the outer code
+  private constructor() {}
+
+  static getInstance(): ScoresManager {
     if (!ScoresManager.instance) {
-      ScoresManager.instance = this;
+      ScoresManager.instance = new ScoresManager();
     }
 
     return ScoresManager.instance;

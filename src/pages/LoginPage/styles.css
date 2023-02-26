@@ -5,3 +5,7 @@
 .name:hover {
   cursor: pointer;
 }
+
+.play_button {
+  margin: 32px auto;
+}

@@ -9,10 +9,10 @@ type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
 /**
  * Button UI component
  */
-export const Button = memo(({ text, disabled, onClick, ...otherProps }: ButtonProps) => {
-  const buttonClassname = cn('button', {
+export const Button = memo(({ text, disabled, className, onClick, ...otherProps }: ButtonProps) => {
+  const buttonClassname: string = cn('button', {
       button__disabled: disabled
-    });
+    }, className);
 
   return (
     <button

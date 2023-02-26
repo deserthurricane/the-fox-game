@@ -59,6 +59,7 @@ export function LoginContainer() {
         </span>
       )}
       <Button 
+        className="play_button"
         text="PLAY!"
         disabled={name.length === 0}
         onClick={goToGamePage}
