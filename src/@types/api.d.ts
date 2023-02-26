@@ -9,4 +9,5 @@ type CAT_API_RESPONSE = Array<{
 
 type FOX_API_RESPONSE = {
   image: string;
+  link: string;
 };

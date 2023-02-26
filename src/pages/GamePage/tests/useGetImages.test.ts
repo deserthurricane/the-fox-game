@@ -20,7 +20,7 @@ describe('useGetImages', () => {
   })
 
   test('Returns dogs images when DOG API call succeeds', async () => {
-    const fakeResponse: DOG_API_RESPONSE = {
+    const fakeDogsResponse: DOG_API_RESPONSE = {
       message: [
         'https://images.dog.ceo/breeds/mastiff-tibetan/n02108551_4927.jpg',
         'https://images.dog.ceo/breeds/schnauzer-giant/n02097130_572.jpg',
@@ -33,7 +33,33 @@ describe('useGetImages', () => {
       ],
     };
 
-    fetchMock.mockResolvedValueOnce({ status: 200, json: jest.fn(() => Promise.resolve(fakeResponse)) })
+    const fakeCatsResponse: CAT_API_RESPONSE = [
+      { id: 'ik', url: 'https://cdn2.thecatapi.com/images/ik.jpg' }, 
+      { id: '1p1', url: 'https://cdn2.thecatapi.com/images/1p1.jpg' }, 
+      { id: '29g', url: 'https://cdn2.thecatapi.com/images/29g.jpg' }, 
+      { id: '7r6', url: 'https://cdn2.thecatapi.com/images/7r6.jpg' }, 
+      { id: 'a1b', url: 'https://cdn2.thecatapi.com/images/a1b.jpg' }, 
+      { id: 'a7n', url: 'https://cdn2.thecatapi.com/images/a7n.jpg' }, 
+      { id: 'b3k', url: 'https://cdn2.thecatapi.com/images/b3k.jpg' }, 
+      { id: '8LxU2Gwmo', url: 'https://cdn2.thecatapi.com/images/8LxU2Gwmo.jpg' }, 
+      { id: 'j3WPHuW7A', url: 'https://cdn2.thecatapi.com/images/j3WPHuW7A.jpg' }, 
+      { id: 'RvfGGt00v', url: 'https://cdn2.thecatapi.com/images/RvfGGt00v.jpg' },
+    ];
+
+    const fakeFox1Response: FOX_API_RESPONSE = {
+      image: 'https://randomfox.ca/images/35.jpg',
+      link: 'https://randomfox.ca/?i=35',
+    };
+
+    const fakeFox2Response: FOX_API_RESPONSE = {
+      image: 'https://randomfox.ca/images/52.jpg',
+      link: 'https://randomfox.ca/?i=52',
+    };
+
+    fetchMock.mockResolvedValueOnce({ status: 200, json: jest.fn(() => Promise.resolve(fakeDogsResponse)) });
+    fetchMock.mockResolvedValueOnce({ status: 200, json: jest.fn(() => Promise.resolve(fakeCatsResponse)) });
+    fetchMock.mockResolvedValueOnce({ status: 200, json: jest.fn(() => Promise.resolve(fakeFox1Response)) });
+    fetchMock.mockResolvedValueOnce({ status: 200, json: jest.fn(() => Promise.resolve(fakeFox2Response)) });
 
     jest.spyOn(Helpers, 'preloadImage').mockImplementation((imageUrl: string, isFox: boolean) => Promise.resolve({ imageUrl, isFox }));
 
@@ -43,7 +69,7 @@ describe('useGetImages', () => {
 
     console.log(result);
 
-    expect(result.current.imagesOneRound.length).toBeGreaterThan(0);
+    expect(result.current.imagesOneRound).toHaveLength(9);
   })
 
   test('renders error when API call fails', async () => {})
