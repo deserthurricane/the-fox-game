@@ -1,9 +1,12 @@
+import { jest } from '@jest/globals';
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { act, render, screen, waitFor } from '@testing-library/react';
 import { renderHook } from '@testing-library/react';
 import fetchMock from 'jest-fetch-mock';
 
 import { useGetImages } from '../useGetImages';
+
+import * as Helpers from '../helpers'; 
 
 // require('react');
 // const { render, screen } = require('@testing-library/react');
@@ -17,7 +20,7 @@ describe('useGetImages', () => {
   })
 
   test('Returns dogs images when DOG API call succeeds', async () => {
-    const fakeResponse/* : DOG_API_RESPONSE */ = {
+    const fakeResponse: DOG_API_RESPONSE = {
       message: [
         'https://images.dog.ceo/breeds/mastiff-tibetan/n02108551_4927.jpg',
         'https://images.dog.ceo/breeds/schnauzer-giant/n02097130_572.jpg',
@@ -30,25 +33,17 @@ describe('useGetImages', () => {
       ],
     };
 
-    fetchMock.mockResolvedValue({ status: 200, json: jest.fn(() => fakeResponse) })
+    fetchMock.mockResolvedValueOnce({ status: 200, json: jest.fn(() => Promise.resolve(fakeResponse)) })
 
-    const { result } = renderHook(() =>
-      useGetImages(-1)
-    );
+    jest.spyOn(Helpers, 'preloadImage').mockImplementation((imageUrl: string, isFox: boolean) => Promise.resolve({ imageUrl, isFox }));
+
+    const { result } = await act(() => {
+      return renderHook(() => useGetImages(-1))
+    })
 
     console.log(result);
 
-    expect(result).not.toBeNull();
-
-
-    // render(<App />)
-
-    // expect(screen.getByRole('heading')).toHaveTextContent('List of Users')
-
-    // expect(await screen.findByText('Joe')).toBeInTheDocument()
-    // expect(await screen.findByText('Tony')).toBeInTheDocument()
-
-    // expect(screen.queryByText('No users found')).not.toBeInTheDocument()
+    expect(result.current.imagesOneRound.length).toBeGreaterThan(0);
   })
 
   test('renders error when API call fails', async () => {})
