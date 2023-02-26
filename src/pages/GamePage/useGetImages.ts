@@ -1,5 +1,12 @@
-import { log } from "console";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { 
+  CAT_API, 
+  FOXES_IMAGES_COUNT, 
+  FOX_API, 
+  NON_FOXES_IMAGES_COUNT, 
+  PRELOADED_NON_FOXES_IMAGES_COUNT,
+} from './../../api/constants';
+import { DOG_API } from '../../api/constants';
 
 function shuffleArray() {
   return Math.random() - 0.5;
@@ -19,30 +26,26 @@ function preloadImage(imageUrl: string, isFox: boolean): Promise<AnimalImage> {
   });
 }
 
-const NON_FOXES_IMAGES_COUNT = 4;
-const PRELOADED_NON_FOXES_IMAGES_COUNT = NON_FOXES_IMAGES_COUNT * 2;
-const FOXES_IMAGES_COUNT = 1;
-const PRELOADED_FOXES_IMAGES_COUNT = FOXES_IMAGES_COUNT * 2;
-
-const DOG_API = `https://dog.ceo/api/breeds/image/random/${PRELOADED_NON_FOXES_IMAGES_COUNT}`;
-const CAT_API = `https://api.thecatapi.com/v1/images/search?limit=${PRELOADED_NON_FOXES_IMAGES_COUNT}`;
-const FOX_API = "https://randomfox.ca/floof";
-
 export type AnimalImage = {
   url: string;
   isFox: boolean;
 };
 
-export function useGetImages(round: number) {
+export function useGetImages(round: number): { imagesOneRound: AnimalImage[], error: string } {
   const imagesRef = useRef<Record<"dogs" | "cats" | "foxes", AnimalImage[]>>();
   const [imagesOneRound, setImagesOneRound] = useState<AnimalImage[]>([]);
   const [error, setError] = useState<string>("");
 
   const getImages: () => Promise<
-    Record<"dogs" | "cats" | "foxes", AnimalImage[]>
+    Record<"dogs" | "cats" | "foxes", AnimalImage[]> | undefined
   > = useCallback(async () => {
     try {
-      const promises = [
+      const promises: [
+        Promise<DOG_API_RESPONSE>, 
+        Promise<CAT_API_RESPONSE>, 
+        Promise<FOX_API_RESPONSE>, 
+        Promise<FOX_API_RESPONSE>,
+      ] = [
         fetch(DOG_API).then((response) => response.json()),
         fetch(CAT_API).then((response) => response.json()),
         fetch(FOX_API).then((response) => response.json()),
@@ -74,13 +77,14 @@ export function useGetImages(round: number) {
       };
     } catch (error) {
       // @TODO
-      console.log(error);
-      setError(error.toString());
+      console.log(error, 'error on getImages');
+      if (typeof error === 'object' && error !== null) {
+        setError(error.toString());
+      }
     }
   }, []);
 
   useEffect(() => {
-    console.log(round, "round");
     if (round % 2 !== 0) {
       if (imagesRef.current) {
         setImagesOneRound(
@@ -93,6 +97,8 @@ export function useGetImages(round: number) {
       }
 
       getImages().then((images) => {
+        if (!images) return;
+        
         imagesRef.current = images;
 
         if (round === -1) {
@@ -108,7 +114,6 @@ export function useGetImages(round: number) {
     }
 
     if (round !== 0 && round % 2 === 0) {
-      // console.log("round !== 0 && round % 2 !== 0");
       if (!imagesRef.current) return;
 
       setImagesOneRound(
@@ -120,8 +125,6 @@ export function useGetImages(round: number) {
       );
     }
   }, [round, getImages]);
-
-  // console.log(imagesOneRound, "imagesOneRound");
 
   return {
     imagesOneRound,
