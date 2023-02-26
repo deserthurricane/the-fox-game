@@ -7,12 +7,7 @@ import {
   PRELOADED_NON_FOXES_IMAGES_COUNT,
 } from './../../api/constants';
 import { DOG_API } from '../../api/constants';
-import { preloadImage, shuffleArray } from './helpers';
-
-export type AnimalImage = {
-  url: string;
-  isFox: boolean;
-};
+import { AnimalImage, preloadImage, shuffleArray } from './helpers';
 
 export function useGetImages(round: number): { imagesOneRound: AnimalImage[], error: string } {
   const imagesRef = useRef<Record<"dogs" | "cats" | "foxes", AnimalImage[]>>();
@@ -73,8 +68,8 @@ export function useGetImages(round: number): { imagesOneRound: AnimalImage[], er
         setImagesOneRound(
           [
             ...imagesRef.current.dogs.slice(0, NON_FOXES_IMAGES_COUNT),
-            // ...imagesRef.current.cats.slice(0, NON_FOXES_IMAGES_COUNT),
-            // ...imagesRef.current.foxes.slice(0, FOXES_IMAGES_COUNT)
+            ...imagesRef.current.cats.slice(0, NON_FOXES_IMAGES_COUNT),
+            ...imagesRef.current.foxes.slice(0, FOXES_IMAGES_COUNT),
           ].sort(shuffleArray)
         );
       }

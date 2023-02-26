@@ -1,6 +1,6 @@
-import { memo } from "react";
-import "./styles.css";
-import { AnimalImage } from "./useGetImages";
+import { memo } from 'react';
+import { AnimalImage } from './helpers';
+import './styles.css';
 
 
 type ImagesListComponentProps = {
@@ -15,7 +15,7 @@ export const ImagesListComponent = memo((
   }: ImagesListComponentProps
 ) => {
     return (
-      <div className="container">
+      <div className="images_container" data-testid="images_container">
         {images.map(({ url, isFox }) => (
           <img
             key={url}

@@ -1,25 +1,16 @@
 import { jest } from '@jest/globals';
-import React from 'react';
-import { act, render, screen, waitFor } from '@testing-library/react';
-import { renderHook } from '@testing-library/react';
+import { act, cleanup, render, renderHook } from '@testing-library/react';
 import fetchMock from 'jest-fetch-mock';
 
 import { useGetImages } from '../useGetImages';
-
 import * as Helpers from '../helpers'; 
+import { GameContainer } from '../GameContainer';
 
-// require('react');
-// const { render, screen } = require('@testing-library/react');
-// const { renderHook } = require('@testing-library/react');
-// const fetchMock = require('jest-fetch-mock');
-// const { useGetImages } = require('../useGetImages');
 
-describe('useGetImages', () => {
+describe('Images are received via API and rendered into the DOM', () => {
   beforeEach(() => {
-    fetchMock.resetMocks()
-  })
+    fetchMock.resetMocks();
 
-  test('Returns dogs images when DOG API call succeeds', async () => {
     const fakeDogsResponse: DOG_API_RESPONSE = {
       message: [
         'https://images.dog.ceo/breeds/mastiff-tibetan/n02108551_4927.jpg',
@@ -61,16 +52,45 @@ describe('useGetImages', () => {
     fetchMock.mockResolvedValueOnce({ status: 200, json: jest.fn(() => Promise.resolve(fakeFox1Response)) });
     fetchMock.mockResolvedValueOnce({ status: 200, json: jest.fn(() => Promise.resolve(fakeFox2Response)) });
 
-    jest.spyOn(Helpers, 'preloadImage').mockImplementation((imageUrl: string, isFox: boolean) => Promise.resolve({ imageUrl, isFox }));
+    jest.spyOn(Helpers, 'preloadImage').mockImplementation((url: string, isFox: boolean) => Promise.resolve({ url, isFox }));
+  });
 
+  afterEach(cleanup);
+
+  test('useGetImages hook returns animals images when API calls succeed', async () => {
     const { result } = await act(() => {
       return renderHook(() => useGetImages(-1))
-    })
+    });
 
-    console.log(result);
-
+    // All 9 images are loaded
     expect(result.current.imagesOneRound).toHaveLength(9);
-  })
 
-  test('renders error when API call fails', async () => {})
-})
+    // There is proper quantity for dogs, cats and foxes images
+    expect(result.current.imagesOneRound.filter(({ url }) => url.startsWith('https://images.dog.ceo'))).toHaveLength(4);
+    expect(result.current.imagesOneRound.filter(({ url }) => url.startsWith('https://cdn2.thecatapi.com'))).toHaveLength(4);
+    expect(result.current.imagesOneRound.filter(({ url }) => url.startsWith('https://randomfox.ca'))).toHaveLength(1);
+
+    // There is no error
+    expect(result.current.error).toBe('');
+  });
+
+  test('Images are rendered in ImagesListComponent', async () => {
+    const { getAllByAltText, getByTestId } = await act(() => {
+      return render(<GameContainer />);
+    });
+
+    const imagesContainer = getByTestId('images_container');
+    const images = getAllByAltText('Animal: dog, cat or fox');
+
+    // Images container is rendered
+    expect(imagesContainer).toBeInTheDocument();
+
+    // All 9 images are rendered
+    expect(images).toHaveLength(9);
+
+    // There is proper quantity for dogs, cats and foxes images in the DOM
+    expect(images.filter((image) => image.getAttribute('src')!.startsWith('https://images.dog.ceo'))).toHaveLength(4);
+    expect(images.filter((image) => image.getAttribute('src')!.startsWith('https://cdn2.thecatapi.com'))).toHaveLength(4);
+    expect(images.filter((image) => image.getAttribute('src')!.startsWith('https://randomfox.ca'))).toHaveLength(1);
+  });
+});

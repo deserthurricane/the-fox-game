@@ -1,3 +1,8 @@
+export type AnimalImage = {
+  url: string;
+  isFox: boolean;
+};
+
 export function shuffleArray() {
   return Math.random() - 0.5;
 }

@@ -7,6 +7,9 @@ module.exports = {
   modulePaths: ['<rootDir>'],
   moduleDirectories: ['node_modules', 'src'],
   setupFilesAfterEnv: ['<rootDir>/setupJest.js'],
-  extensionsToTreatAsEsm: ['.ts'],
-  moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json", "node"]
+  extensionsToTreatAsEsm: ['.ts', '.tsx'],
+  moduleFileExtensions: ['ts', 'tsx', 'js'],
+    moduleNameMapper: {
+      '\\.css': '<rootDir>/test/__mocks__/styleMock.js',
+  }
 }

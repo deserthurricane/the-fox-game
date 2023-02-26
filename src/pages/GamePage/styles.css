@@ -1,14 +1,14 @@
+.images_container {
+  display: flex;
+  flex-wrap: wrap;
+  width: 300px;
+  margin: 0 auto;
+}
+
 .image {
   width: 100px;
   height: 100px;
   object-fit: cover;
   object-position: center;
   background-color: #eee;
-}
-
-.container {
-  display: flex;
-  flex-wrap: wrap;
-  width: 300px;
-  margin: 0 auto;
 }
