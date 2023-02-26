@@ -15,6 +15,7 @@
 
 .button__disabled {
   background: white;
+  border-color: orange;
   color: black;
 }
 

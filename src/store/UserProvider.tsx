@@ -1,27 +1,24 @@
 import React, { createContext, useState } from "react";
 
-const initialUserValue = {
-  name: '',
-  score: 0,
-}
+const initialUserValue = '';
 
 export const UserContext = createContext<{ 
-  user: UserData, 
-  setUser: React.Dispatch<React.SetStateAction<UserData>>, // ReturnType<typeof useState<UserData>>[1],
+  user: string, 
+  setUser: React.Dispatch<React.SetStateAction<string>>,
 }>({
   user: initialUserValue,
   setUser: () => initialUserValue,
 });
 
+/**
+ * Context that provides user value and its' setter
+ */
 export function UserProvider({ children }: React.PropsWithChildren) {
-  const [user, setUser] = useState<UserData>(initialUserValue);
+  const [user, setUser] = useState<string>(initialUserValue);
 
   return (
     <UserContext.Provider value={{
-      user: {
-        name: user.name,
-        score: user.score,
-      },
+      user,
       setUser,
     }}>
       {children}

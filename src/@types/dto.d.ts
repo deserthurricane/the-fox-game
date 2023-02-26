@@ -3,5 +3,3 @@ type ScoreDTO = {
   date: number;
   score: number;
 }
-
-type UserData = Omit<ScoreDTO, 'date'>;

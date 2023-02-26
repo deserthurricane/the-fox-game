@@ -4,12 +4,15 @@ import { ScreenContext } from "../../store/ScreenProvider";
 import { UserContext } from "../../store/UserProvider";
 import './styles.css';
 
+/**
+ * Login page container
+ */
 export function LoginContainer() {
   const [editMode, setEditMode] = useState<boolean | null>(null);
   const [name, setName] = useState<string>('');
 
   const { setScreen } = useContext(ScreenContext);
-  const { user, setUser } = useContext(UserContext);
+  const { user: savedUser, setUser } = useContext(UserContext);
 
   const hideInput = useCallback(() => {
     if (name.length > 0) {
@@ -18,22 +21,17 @@ export function LoginContainer() {
   }, [name]);
 
   const goToGamePage = useCallback(() => {
-    if (typeof setScreen === 'function') {
-      setScreen('game');
-      setUser({
-        name,
-        score: 0,
-      })
-    }
+    setScreen('game');
+    setUser(name);
   }, [name, setScreen, setUser]);
 
   useEffect(() => {
-    setEditMode(!user.name);
+    setEditMode(!savedUser);
     
-    if (user.name) {
-      setName(user.name);
+    if (savedUser) {
+      setName(savedUser);
     }
-  }, [user.name]);
+  }, [savedUser]);
 
   if (editMode === null) {
     return null;

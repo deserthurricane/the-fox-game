@@ -6,6 +6,9 @@ import { UserContext } from "../../store/UserProvider";
 import { ScreenContext } from "../../store/ScreenProvider";
 import { ImagesListComponent } from "./ImagesListComponent";
 
+/**
+ * Game page container
+ */
 export function GameContainer() {
   const [foxCount, setFoxCount] = useState<number>(0);
   const [round, setRound] = useState<number>(-1);
@@ -34,23 +37,18 @@ export function GameContainer() {
   }, [round, imagesOneRound]);
 
   useEffect(() => {
-    if (remainingTimeSec === 0 && user?.name && typeof setScreen === 'function') {
+    if (remainingTimeSec === 0 && user) {
       const scoresStorage = ScoresManager.getInstance();
       scoresStorage.addScore({
-        name: user.name,
+        name: user,
         date: Date.now(),
-        score: foxCount,
-      });
-
-      setUser({
-        name: user.name,
         score: foxCount,
       });
 
       setScreen('scores');
     }
 
-  }, [remainingTimeSec, user.name, foxCount, setScreen, setUser]);
+  }, [remainingTimeSec, user, foxCount, setScreen, setUser]);
 
   if (round === -1) {
     return <span>Is loading...</span>;

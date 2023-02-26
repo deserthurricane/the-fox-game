@@ -9,6 +9,9 @@ import {
 import { DOG_API } from '../../api/constants';
 import { AnimalImage, preloadImage, shuffleArray } from './helpers';
 
+/**
+ * Getting and merging images from different APIs
+ */
 export function useGetImages(round: number): { imagesOneRound: AnimalImage[], error: string } {
   const imagesRef = useRef<Record<"dogs" | "cats" | "foxes", AnimalImage[]>>();
   const [imagesOneRound, setImagesOneRound] = useState<AnimalImage[]>([]);

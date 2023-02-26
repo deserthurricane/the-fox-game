@@ -7,6 +7,9 @@ import { ScoreboardComponent } from "./ScoreboardComponent";
 
 import './styles.css';
 
+/**
+ * Scoreboard page container
+ */
 export function ScoreboardContainer() {
   const [sortedScores, setSortedScores] = useState<ScoreDTO[] | undefined>();
 
@@ -23,24 +26,11 @@ export function ScoreboardContainer() {
   }, []);
 
   const goToWelcomeScreen = useCallback(() => {
-    if (typeof setScreen === 'function' && typeof setUser === 'function') {
-      setUser((user) => ({
-        ...user,
-        score: 0,
-      }));
-      setScreen('login');
-    }
-  }, [setScreen, setUser]);
+    setScreen('login');
+  }, [setScreen]);
 
   const goToGameScreen = useCallback(() => {
-    if (typeof setScreen === 'function') {
-      setUser((user) => ({
-        ...user,
-        score: 0,
-      }));
-
-      setScreen('game');
-    }
+    setScreen('game');
   }, [setScreen]);
 
   if (!sortedScores) {

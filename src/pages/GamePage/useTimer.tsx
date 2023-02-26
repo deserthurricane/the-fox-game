@@ -1,7 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 
-const ONE_ROUND_TIME_SEC = 30; // 5
+const ONE_ROUND_TIME_SEC = 30;
 
+/**
+ * Hook for counting remaining time
+ */
 export function useTimer(areImagesVisible: boolean): number {
   const [remainingTimeSec, setRemainingTimeSec] = useState<number>(ONE_ROUND_TIME_SEC);
 

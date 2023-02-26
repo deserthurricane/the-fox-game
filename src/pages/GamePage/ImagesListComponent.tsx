@@ -8,6 +8,9 @@ type ImagesListComponentProps = {
   onClick: (isFox: boolean) => void;
 }
 
+/**
+ * UI component for rendering game images
+ */
 export const ImagesListComponent = memo((
   ({
     images,
@@ -16,9 +19,10 @@ export const ImagesListComponent = memo((
 ) => {
     return (
       <div className="images_container" data-testid="images_container">
-        {images.map(({ url, isFox }) => (
+        {images.map(({ url, isFox }, index) => (
           <img
-            key={url}
+            // Prevent key collision when similar images are loaded
+            key={`${url}_${index}`}
             alt="Animal: dog, cat or fox"
             src={url}
             className="image"
