@@ -103,6 +103,14 @@ export function useGetImages(round: number): { imagesOneRound: AnimalImage[], er
     }
   }, [round, getImages]);
 
+  useEffect(() => {
+    return () => {
+      imagesRef.current = undefined;
+      setImagesOneRound([]);
+      setError('');
+    }
+  }, []);
+
   return {
     imagesOneRound,
     error

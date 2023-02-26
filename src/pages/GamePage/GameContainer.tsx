@@ -58,8 +58,10 @@ export function GameContainer() {
 
   return (
     <div>
-      <span>Score: {foxCount}</span>
-      <span>&nbsp;&nbsp;Time left: {remainingTimeSec}</span>
+      <div className="info_container">
+        <span>Score: {foxCount}</span>
+        <span>&nbsp;&nbsp;Time left: {remainingTimeSec}</span>
+      </div>
       <ImagesListComponent images={imagesOneRound} onClick={onImageClick} />
     </div>
   );

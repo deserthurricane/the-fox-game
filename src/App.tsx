@@ -9,7 +9,7 @@ import { Layout } from "./components";
 const AppComponent = memo(() => {
   const { screen } = useContext(ScreenContext);
 
-  const Page = useMemo(() => {
+  const ScreenComponent = useMemo(() => {
     switch (screen) {
       case 'login':
         return <LoginContainer />;
@@ -22,11 +22,9 @@ const AppComponent = memo(() => {
     }
   }, [screen]);
 
-  console.log('screen');
-
   return (
     <Layout>
-      {Page}
+      {ScreenComponent}
     </Layout>
   )
 });
