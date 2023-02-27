@@ -12,23 +12,33 @@ import { ImagesListComponent } from './ImagesListComponent';
 export function GameContainer() {
   const [foxCount, setFoxCount] = useState<number>(0);
   const [round, setRound] = useState<number>(-1);
+  const [attemptsCount, setAttemptsCount] = useState(0);
 
   const { user, setUser } = useContext(UserContext);
   const { setScreen } = useContext(ScreenContext);
 
-  const { imagesOneRound } = useGetImages(round);
+  const { imagesOneRound, error } = useGetImages(round);
 
   const remainingTimeSec = useTimer(round === 0);
 
   const onImageClick = useCallback((isFox: boolean) => {
+    // Prevent multiple clicks on the same set of images
+    const newAttemptsCount = attemptsCount + 1;
+
+    if (newAttemptsCount - round > 1) {
+      return;
+    }
+
+    setAttemptsCount(newAttemptsCount);
+
     if (isFox) {
       setFoxCount((foxCount) => foxCount + 1);
     } else {
       setFoxCount((foxCount) => (foxCount - 1 >= 0 ? foxCount - 1 : 0));
     }
 
-    setRound((round) => round + 1);
-  }, []);
+    setRound(round + 1);
+  }, [attemptsCount, round]);
 
   useEffect(() => {
     if (round === -1 && imagesOneRound.length > 0) {
@@ -49,7 +59,11 @@ export function GameContainer() {
     }
   }, [remainingTimeSec, user, foxCount, setScreen, setUser]);
 
-  // console.log(round, imagesOneRound);
+  useEffect(() => {
+    if (error) {
+      alert(error);
+    }
+  }, [error]);
 
   if (round === -1) {
     return <span>Is loading...</span>;
