@@ -49,6 +49,8 @@ export function GameContainer() {
     }
   }, [remainingTimeSec, user, foxCount, setScreen, setUser]);
 
+  // console.log(round, imagesOneRound);
+
   if (round === -1) {
     return <span>Is loading...</span>;
   }
