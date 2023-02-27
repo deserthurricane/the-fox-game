@@ -2,8 +2,8 @@
 
 ## Running
 
-1. Install `node_modules` by running `npm run install` or `yarn`.
-2. To run the project locally, run `npm start` or `yarn start`.
+1. To launch the project locally, install `node_modules` by running `npm i --legacy-peer-deps` or `yarn` in the root directory.
+2. Run `npm start` or `yarn start`.
 3. Enjoy the game at `http://localhost:3000/`.
 
 ## Testing
