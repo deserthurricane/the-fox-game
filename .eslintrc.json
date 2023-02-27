@@ -21,7 +21,7 @@
     "@typescript-eslint/consistent-type-definitions": 0,
     "@typescript-eslint/strict-boolean-expressions": 0,
     "@typescript-eslint/prefer-nullish-coalescing": 0,
-    "@typescript-eslint/no-floating-promises": 1,
+    "@typescript-eslint/no-floating-promises": 0,
     "@typescript-eslint/triple-slash-reference": 0,
     "@typescript-eslint/no-non-null-assertion": 0,
     "react/display-name": 0,

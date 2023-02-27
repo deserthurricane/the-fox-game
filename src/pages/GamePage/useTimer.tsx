@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 
-const ONE_ROUND_TIME_SEC = 3600;
+const ONE_ROUND_TIME_SEC = 30;
 
 /**
  * Hook for counting remaining time
