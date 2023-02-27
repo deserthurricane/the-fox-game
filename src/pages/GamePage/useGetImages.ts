@@ -62,14 +62,14 @@ export function useGetImages(round: number): { imagesOneRound: AnimalImage[]; er
       }
     }, []);
 
-  useEffect(() => {
+  useEffect(() => {    
     if (round % 2 !== 0) {
       if (imagesRef.current) {
         setImagesOneRound(
           [
-            ...imagesRef.current.dogs.slice(0, NON_FOXES_IMAGES_COUNT),
-            ...imagesRef.current.cats.slice(0, NON_FOXES_IMAGES_COUNT),
-            ...imagesRef.current.foxes.slice(0, FOXES_IMAGES_COUNT),
+            ...imagesRef.current.dogs.slice(NON_FOXES_IMAGES_COUNT),
+            ...imagesRef.current.cats.slice(NON_FOXES_IMAGES_COUNT),
+            ...imagesRef.current.foxes.slice(FOXES_IMAGES_COUNT),
           ].sort(shuffleArray),
         );
       }
@@ -96,9 +96,9 @@ export function useGetImages(round: number): { imagesOneRound: AnimalImage[]; er
 
       setImagesOneRound(
         [
-          ...imagesRef.current.dogs.slice(NON_FOXES_IMAGES_COUNT),
-          ...imagesRef.current.cats.slice(NON_FOXES_IMAGES_COUNT),
-          ...imagesRef.current.foxes.slice(FOXES_IMAGES_COUNT),
+          ...imagesRef.current.dogs.slice(0, NON_FOXES_IMAGES_COUNT),
+          ...imagesRef.current.cats.slice(0, NON_FOXES_IMAGES_COUNT),
+          ...imagesRef.current.foxes.slice(0, FOXES_IMAGES_COUNT),
         ].sort(shuffleArray),
       );
     }
