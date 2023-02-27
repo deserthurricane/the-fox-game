@@ -11,16 +11,13 @@ export function shuffleArray() {
  * Force browser to cache images
  * and resolve them via Image onload event callback
  */
-export async function preloadImage(imageUrl: string, isFox: boolean): Promise<AnimalImage> {
+export async function preloadImage(imageUrl: string): Promise<boolean> {
   return await new Promise((resolve, reject) => {
     const image = new Image();
     image.src = imageUrl;
 
     image.onload = () => {
-      resolve({
-        url: imageUrl,
-        isFox,
-      });
+      resolve(true);
     };
 
     image.onerror = () => {

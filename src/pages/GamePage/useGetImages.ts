@@ -59,19 +59,15 @@ export function useGetImages(round: number): {
           .slice(0, catsCount)
           .map((data) => ({ url: data.url, isFox: false }));
 
-        const foxes = otherData
-          .slice(-foxesCount)
-          .flatMap(({ data }) => ({
-            url: (data as AxiosResponse<FOX_API_RESPONSE>['data']).image,
-            isFox: true,
-          }));
+        const foxes = otherData.slice(-foxesCount).flatMap(({ data }) => ({
+          url: (data as AxiosResponse<FOX_API_RESPONSE>['data']).image,
+          isFox: true,
+        }));
 
         const animals: AnimalImage[] = [...dogs, ...cats, ...foxes];
 
         // Cache received images
-        await Promise.all(
-          animals.map(async (animal) => await preloadImage(animal.url, animal.isFox)),
-        );
+        await Promise.all(animals.map(async (animal) => await preloadImage(animal.url)));
 
         return {
           dogs,
