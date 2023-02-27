@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
+import axios, { AxiosResponse } from 'axios';
 import {
   CAT_API,
   FOXES_IMAGES_COUNT,
@@ -19,34 +20,36 @@ export function useGetImages(round: number): { imagesOneRound: AnimalImage[]; er
 
   const getImages: () => Promise<Record<'dogs' | 'cats' | 'foxes', AnimalImage[]> | undefined> =
     useCallback(async () => {
+      // Clean loaded data
+      imagesRef.current = undefined;
+
       try {
-        const fetchPromises = [
-          fetch(DOG_API),
-          fetch(CAT_API),
-          fetch(FOX_API),
-          fetch(FOX_API),
+        const fetchPromises: [
+          Promise<AxiosResponse<DOG_API_RESPONSE>>, 
+          Promise<AxiosResponse<CAT_API_RESPONSE>>, 
+          Promise<AxiosResponse<FOX_API_RESPONSE>>, 
+          Promise<AxiosResponse<FOX_API_RESPONSE>>
+        ] = [
+          axios.get(DOG_API),
+          axios.get(CAT_API),
+          axios.get(FOX_API),
+          axios.get(FOX_API),
         ];
 
-        const blobData = await Promise.all(fetchPromises);
-
-        const [dogsData, catsData, fox1Data, fox2Data]: [Promise<DOG_API_RESPONSE>, Promise<CAT_API_RESPONSE>, Promise<FOX_API_RESPONSE>, Promise<FOX_API_RESPONSE>] = await Promise.all(blobData.map(response => response.json()));
-
-        console.log(dogsData, 'dogsData');
-        
+        const [dogsData, catsData, fox1Data, fox2Data] = await Promise.all(fetchPromises);        
 
         const animals: AnimalImage[] = [
-          ...dogsData.message.map((dogUrl) => ({ url: dogUrl, isFox: false })),
-          ...catsData
+          ...dogsData.data.message.map((dogUrl) => ({ url: dogUrl, isFox: false })),
+          ...catsData.data
             .slice(0, PRELOADED_NON_FOXES_IMAGES_COUNT)
             .map(({ url }) => ({ url, isFox: false })),
-          { url: fox1Data.image, isFox: true },
-          { url: fox2Data.image, isFox: true },
+          { url: fox1Data.data.image, isFox: true },
+          { url: fox2Data.data.image, isFox: true },
         ];
 
-        animals.forEach(animal => preloadImage(animal.url, animal.isFox));
-
-        // const animals = preloadedImagesPromises;
-
+        // Cache received images
+        await Promise.all(animals.map(animal => preloadImage(animal.url, animal.isFox)));
+        
         return {
           dogs: animals.slice(0, PRELOADED_NON_FOXES_IMAGES_COUNT),
           cats: animals.slice(
