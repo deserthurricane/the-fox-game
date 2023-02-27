@@ -12,7 +12,7 @@ export function shuffleArray() {
  * and resolve them via Image onload event callback
  */
 export async function preloadImage(imageUrl: string, isFox: boolean): Promise<AnimalImage> {
-  return await new Promise((resolve) => {
+  return await new Promise((resolve, reject) => {
     const image = new Image();
     image.src = imageUrl;
 
@@ -21,6 +21,10 @@ export async function preloadImage(imageUrl: string, isFox: boolean): Promise<An
         url: imageUrl,
         isFox,
       });
+    };
+
+    image.onerror = () => {
+      reject(new Error('Image is not found'));
     };
   });
 }

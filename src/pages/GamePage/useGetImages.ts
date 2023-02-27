@@ -13,9 +13,14 @@ import { AnimalImage, preloadImage, shuffleArray } from './helpers';
 /**
  * Getting and merging images from different APIs
  */
-export function useGetImages(round: number): { imagesOneRound: AnimalImage[]; error: string } {
+export function useGetImages(round: number): {
+  imagesOneRound: AnimalImage[];
+  isLoading: boolean;
+  error: string;
+} {
   const imagesRef = useRef<Record<'dogs' | 'cats' | 'foxes', AnimalImage[]>>();
   const [imagesOneRound, setImagesOneRound] = useState<AnimalImage[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
 
   const getImages: () => Promise<Record<'dogs' | 'cats' | 'foxes', AnimalImage[]> | undefined> =
@@ -23,20 +28,17 @@ export function useGetImages(round: number): { imagesOneRound: AnimalImage[]; er
       // Clean loaded data
       imagesRef.current = undefined;
 
+      setIsLoading(true);
+
       try {
         const fetchPromises: [
-          Promise<AxiosResponse<DOG_API_RESPONSE>>, 
-          Promise<AxiosResponse<CAT_API_RESPONSE>>, 
-          Promise<AxiosResponse<FOX_API_RESPONSE>>, 
-          Promise<AxiosResponse<FOX_API_RESPONSE>>
-        ] = [
-          axios.get(DOG_API),
-          axios.get(CAT_API),
-          axios.get(FOX_API),
-          axios.get(FOX_API),
-        ];
+          Promise<AxiosResponse<DOG_API_RESPONSE>>,
+          Promise<AxiosResponse<CAT_API_RESPONSE>>,
+          Promise<AxiosResponse<FOX_API_RESPONSE>>,
+          Promise<AxiosResponse<FOX_API_RESPONSE>>,
+        ] = [axios.get(DOG_API), axios.get(CAT_API), axios.get(FOX_API), axios.get(FOX_API)];
 
-        const [dogsData, catsData, fox1Data, fox2Data] = await Promise.all(fetchPromises);        
+        const [dogsData, catsData, fox1Data, fox2Data] = await Promise.all(fetchPromises);
 
         const animals: AnimalImage[] = [
           ...dogsData.data.message.map((dogUrl) => ({ url: dogUrl, isFox: false })),
@@ -48,8 +50,10 @@ export function useGetImages(round: number): { imagesOneRound: AnimalImage[]; er
         ];
 
         // Cache received images
-        await Promise.all(animals.map(animal => preloadImage(animal.url, animal.isFox)));
-        
+        await Promise.all(
+          animals.map(async (animal) => await preloadImage(animal.url, animal.isFox)),
+        );
+
         return {
           dogs: animals.slice(0, PRELOADED_NON_FOXES_IMAGES_COUNT),
           cats: animals.slice(
@@ -62,12 +66,17 @@ export function useGetImages(round: number): { imagesOneRound: AnimalImage[]; er
         // @TODO
         console.log(error, 'error on getImages');
         if (typeof error === 'object' && error !== null) {
-          setError(JSON.stringify(error));
+          const errorText = error.hasOwnProperty('message')
+            ? (error as Error).message
+            : JSON.stringify(error);
+          setError(errorText);
         }
+      } finally {
+        setIsLoading(false);
       }
     }, []);
 
-  useEffect(() => {    
+  useEffect(() => {
     if (round % 2 !== 0) {
       if (imagesRef.current) {
         setImagesOneRound(
@@ -119,6 +128,7 @@ export function useGetImages(round: number): { imagesOneRound: AnimalImage[]; er
 
   return {
     imagesOneRound,
+    isLoading,
     error,
   };
 }
