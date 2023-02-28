@@ -1,6 +1,9 @@
 import React, { memo } from 'react';
 import './styles.css';
 
+/**
+ * Common layout for all app pages
+ */
 export const Layout = memo(({ children }: React.PropsWithChildren) => {
   return (
     <>

@@ -1,5 +1,5 @@
 {
-  "name": "typescript",
+  "name": "the_fox_game",
   "description": "Click the Fox! Game",
   "main": "src/index.tsx",
   "version": "1.0.0",

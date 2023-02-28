@@ -23,10 +23,12 @@ export function useGetImages(round: number): {
     isFirstCall: boolean,
   ) => Promise<Record<'dogs' | 'cats' | 'foxes', AnimalImage[]> | undefined> = useCallback(
     async (isFirstCall) => {
+      // Make the initial images buffer bigger for smooth gameplay
       const dogsCount = isFirstCall ? NON_FOXES_IMAGES_COUNT * 5 : NON_FOXES_IMAGES_COUNT * 2;
       const catsCount = isFirstCall ? NON_FOXES_IMAGES_COUNT * 5 : NON_FOXES_IMAGES_COUNT * 2;
       const foxesCount = isFirstCall ? FOXES_IMAGES_COUNT * 5 : FOXES_IMAGES_COUNT * 2;
 
+      // Need to call Cats and Foxes APIs multiple times due to API restrictions
       const foxesPromises: Array<Promise<AxiosResponse<FOX_API_RESPONSE>>> = [];
 
       for (let i = 0; i < foxesCount; i++) {
@@ -66,7 +68,7 @@ export function useGetImages(round: number): {
 
         const animals: AnimalImage[] = [...dogs, ...cats, ...foxes];
 
-        // Cache received images
+        // Cache received images for faster painting
         await Promise.all(animals.map(async (animal) => await preloadImage(animal.url)));
 
         return {
@@ -105,6 +107,7 @@ export function useGetImages(round: number): {
         );
       }
 
+      // Add new images to the buffer on odd rounds
       getImages(round === -1).then((images) => {
         if (!images) return;
 
@@ -158,8 +161,10 @@ export function useGetImages(round: number): {
     // When images buffer is almost empty, we need to block interface from user interaction
     const needToShowIsLoading =
       imagesRef.current &&
-      Array.isArray(imagesRef.current?.dogs) &&
-      imagesRef.current.dogs.length === NON_FOXES_IMAGES_COUNT;
+      ([imagesRef.current.dogs.length, imagesRef.current.cats.length].some(
+        (imagesBuffer) => imagesBuffer === NON_FOXES_IMAGES_COUNT,
+      ) ||
+        imagesRef.current.foxes.length === FOXES_IMAGES_COUNT);
 
     if (needToShowIsLoading) {
       setIsLoading(true);
