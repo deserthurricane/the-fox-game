@@ -73,7 +73,7 @@ export function GameContainer() {
         <span>Score: {foxCount}</span>
         <span>&nbsp;&nbsp;Time left: {remainingTimeSec}</span>
       </div>
-      <ImagesListComponent images={imagesOneRound} onClick={onImageClick} />
+      <ImagesListComponent isDisabled={isLoading} images={imagesOneRound} onClick={onImageClick} />
     </div>
   );
 }

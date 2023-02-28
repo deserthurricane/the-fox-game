@@ -5,16 +5,20 @@
   margin: 0 auto;
 }
 
+.images_container:hover {
+  cursor: pointer;
+}
+
+.images_container__loading:hover {
+  cursor: progress;
+}
+
 .image {
   width: 150px;
   height: 150px;
   object-fit: cover;
   object-position: center;
   background-color: #eee;
-}
-
-.image:hover {
-  cursor: pointer;
 }
 
 .info_container {
